@@ -1,0 +1,10 @@
+{
+	"id": "obsidian-travel-review-plugin",
+	"name": "Travel Review",
+	"version": "1.0.1",
+	"minAppVersion": "0.12.0",
+	"description": "Travel through breadth/deep first search to review your notes",
+	"author": "Ruta Tang",
+	"authorUrl": "https://www.rutatang.com",
+	"isDesktopOnly": true
+}
