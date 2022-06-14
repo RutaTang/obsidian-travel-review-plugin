@@ -26,7 +26,6 @@ export default class TravelReviewPlugin extends Plugin {
 	notePathsToTravel: any[] = [];
 	totalNotesToTravel: Number = 0;
 	isToolBarShown = true;
-	toolBarContainer: HTMLElement;
 	startedNotePath: String;
 
 	openFileToCurrentActiveLeaf(path: String) {
@@ -99,11 +98,18 @@ export default class TravelReviewPlugin extends Plugin {
 				// new Notice("This is a notice!");
 				// this.openFileToCurrentActiveLeaf("React.md");
 				// this.travelToNext();
-				this.isToolBarShown = !this.isToolBarShown;
-				if (!this.toolBarContainer) {
+				const container: HTMLElement | null = document.querySelector(
+					".obsidian-travel-review-plugin"
+				);
+				if (!container) {
 					const activeMarkdownView =
 						this.app.workspace.getActiveViewOfType(MarkdownView);
+					if (!activeMarkdownView) {
+						new Notice("Only work on markdown file!")
+						return;
+					}
 					const floatToolbar = document.createElement("div");
+					floatToolbar.addClass("obsidian-travel-review-plugin");
 					activeMarkdownView.contentEl.appendChild(floatToolbar);
 					ReactDom.createRoot(floatToolbar).render(
 						<AppContext.Provider
@@ -122,9 +128,12 @@ export default class TravelReviewPlugin extends Plugin {
 							<Toolbar />
 						</AppContext.Provider>
 					);
-					this.toolBarContainer = floatToolbar;
+					this.isToolBarShown = true;
+					floatToolbar.hidden = !this.isToolBarShown;
+					return;
 				}
-				this.toolBarContainer.hidden = this.isToolBarShown;
+				this.isToolBarShown = !this.isToolBarShown;
+				container.hidden = !this.isToolBarShown;
 			}
 		);
 		// Perform additional things with the ribbon
@@ -158,9 +167,9 @@ export default class TravelReviewPlugin extends Plugin {
 		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
 		// Using this function will automatically remove the event listener when this plugin is disabled.
 		// this.registerDomEvent(document, "click", (evt: MouseEvent) => {
-			// console.log(this.app);
-			// console.log(this.app.metadataCache.resolvedLinks);
-			// console.log('click', evt);
+		// console.log(this.app);
+		// console.log(this.app.metadataCache.resolvedLinks);
+		// console.log('click', evt);
 		// });
 	}
 
